@@ -1,0 +1,64 @@
+defaults:
+  - _self_
+  - agent: ot
+  - suite: dmc
+  - override hydra/launcher: submitit_local
+
+# Root Dir
+root_dir: 'path_to_dir/IL_ADS'
+
+# replay buffer
+replay_buffer_size: 150000
+replay_buffer_num_workers: 1
+nstep: 3
+batch_size: 512
+expert_batch_size: 256
+
+# misc
+seed: 2
+device: cuda
+save_video: true
+save_train_video: false
+use_tb: true
+
+# snapshot
+save_model: true # save the newest model
+save_every_model: false
+save_experiences: false # save all collected trajectories
+
+# experiment
+obs_type: 'pixels' # pixels, features
+experiment: ${agent.name}_${suite.name}_${obs_type}_${task_name}_seed_${seed}
+
+# expert dataset
+num_demos: 10
+expert_dataset: '${root_dir}/IL/expert_demos/${task_name}/expert_demos.pkl'
+
+# Load weights
+load_checkpoint: false
+checkpoint_path: 
+
+# Automatic Discount Scheduling
+adaptive_discount: false
+cost_encoder: 'resnet'
+ads:
+  _target_: modules.ads.AutomaticDiscountScheduling
+  device: ${device}
+  horizon: ??? # to be specified later
+  alpha: 0.2 # hyperparameter for the mapping function
+  threshold: 0.9 # threshold for the progress recognizer
+  progress_start: 0.2
+  max_progress_delta: 5
+  ref_score_percentile: 50
+  agent_score_percentile: 90
+
+hydra:
+  run:
+    dir: ./exp_local/${now:%Y.%m.%d}/${now:%H%M%S}_${experiment}
+  sweep:
+    dir: ./exp_local/${now:%Y.%m.%d}/${now:%H%M%S}
+    subdir: ${hydra.job.num}
+  launcher:
+    tasks_per_node: 1
+    nodes: 1
+    submitit_folder: ./exp/${now:%Y.%m.%d}/${now:%H%M%S}_${experiment}/.slurm

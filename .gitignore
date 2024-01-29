@@ -1,0 +1,9 @@
+IL/exp_local
+IL/expert_demos
+IL/weights
+*.pyc
+*generate_expert/*demos*
+IL/run.sh
+IL/*expert_demos
+*.pth.tar
+*__pycache__*

@@ -1,0 +1,5 @@
+defaults:
+  - params
+  - _self_
+
+task_name: stick-pull-v2
