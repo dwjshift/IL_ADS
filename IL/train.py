@@ -247,8 +247,8 @@ class WorkspaceIL:
 				if repr(self.agent) == 'ot':
 					new_rewards = self.agent.ot_rewarder(reward_obs, self.global_step)
 					new_rewards_sum = np.sum(new_rewards)
-				elif repr(self.agent) == 'dac':
-					new_rewards = self.agent.dac_rewarder(observations, actions)
+				elif repr(self.agent) == 'gaifo':
+					new_rewards = self.agent.gaifo_rewarder(observations, actions)
 					new_rewards_sum = np.sum(new_rewards)
 				
 				if repr(self.agent) == 'ot':
@@ -261,7 +261,7 @@ class WorkspaceIL:
 				for i, elt in enumerate(time_steps):
 					elt = elt._replace(
 						observation=time_steps[i].observation[self.cfg.obs_type])
-					if repr(self.agent) == 'ot' or repr(self.agent) == 'dac':
+					if repr(self.agent) == 'ot' or repr(self.agent) == 'gaifo':
 						if i == 0:
 							elt = elt._replace(reward=float('nan'))
 						else:
@@ -280,7 +280,7 @@ class WorkspaceIL:
 						log('episode', self.global_episode)
 						log('buffer_size', len(self.replay_storage))
 						log('step', self.global_step)
-						if repr(self.agent) == 'ot' or repr(self.agent) == 'dac':
+						if repr(self.agent) == 'ot' or repr(self.agent) == 'gaifo':
 								log('expert_reward', self.expert_reward)
 								log('imitation_reward', new_rewards_sum)
 

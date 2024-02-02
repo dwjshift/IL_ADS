@@ -1,5 +1,5 @@
 # @package agent
-_target_: agent.dac.DACAgent
+_target_: agent.gaifo.GAIfOAgent
 obs_shape: ??? # to be specified later
 action_shape: ??? # to be specified later
 device: ${device}
@@ -18,4 +18,4 @@ augment: True
 use_actions: false
 suite_name: ${suite.name}
 obs_type: ${obs_type}
-name: 'dac'
+name: 'gaifo'

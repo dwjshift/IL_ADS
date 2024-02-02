@@ -97,7 +97,7 @@ class Critic(nn.Module):
 		return q1, q2
 
 
-class DACAgent:
+class GAIfOAgent:
 	def __init__(self, obs_shape, action_shape, device, lr, feature_dim,
 				 hidden_dim, critic_target_tau, num_expl_steps,
 				 update_every_steps, stddev_schedule, stddev_clip, use_tb,
@@ -160,7 +160,7 @@ class DACAgent:
 		self.discriminator.train(training)
 
 	def __repr__(self):
-		return 'dac'
+		return 'gaifo'
 
 	def act(self, obs, step, eval_mode):
 		obs = torch.as_tensor(obs, device=self.device)
@@ -287,7 +287,7 @@ class DACAgent:
 
 		return metrics
 
-	def dac_rewarder(self, obses, actions):
+	def gaifo_rewarder(self, obses, actions):
 		obses = torch.tensor(obses).to(self.device)
 		obses = self.critic.trunk(self.encoder(obses)) if self.use_encoder else self.critic.trunk(obses)
 		if self.use_actions:
@@ -321,7 +321,7 @@ class DACAgent:
 			disc_input = self.critic.trunk(disc_input)
 
 		disc_output = self.discriminator(disc_input)
-		dac_loss = F.binary_cross_entropy_with_logits(disc_output,
+		gaifo_loss = F.binary_cross_entropy_with_logits(disc_output,
 													  disc_label,
 													  reduction='sum')
 
@@ -329,14 +329,14 @@ class DACAgent:
 		grad_pen = compute_gradient_penalty(self.discriminator, expert_obs,
 											policy_obs)
 
-		dac_loss /= batch_size
+		gaifo_loss /= batch_size
 		grad_pen /= batch_size
 
-		metrics['disc_loss'] = dac_loss.mean().item()
+		metrics['disc_loss'] = gaifo_loss.mean().item()
 		metrics['disc_grad_pen'] = grad_pen.mean().item()
 
 		self.discriminator_opt.zero_grad(set_to_none=True)
-		dac_loss.backward()
+		gaifo_loss.backward()
 		grad_pen.backward()
 		self.discriminator_opt.step()
 		return metrics
