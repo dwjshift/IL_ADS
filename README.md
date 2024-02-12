@@ -33,9 +33,7 @@
 Please use the following bibtex for citations:
 
 ```
-@inproceedings{
-liu2024imitation,
-title={Imitation Learning from Observation with Automatic Discount Scheduling},
+@inproceedings{liu2024imitation, title={Imitation Learning from Observation with Automatic Discount Scheduling},
 author={Yuyang Liu and Weijun Dong and Yingdong Hu and Chuan Wen and Zhao-Heng Yin and Chongjie Zhang and Yang Gao},
 booktitle={The Twelfth International Conference on Learning Representations},
 year={2024},
