@@ -97,7 +97,7 @@ class WorkspaceIL:
 		# create envs
 		self.train_env, self.env_horizon = hydra.utils.call(self.cfg.suite.task_make_fn)
 		self.eval_env, self.env_horizon = hydra.utils.call(self.cfg.suite.task_make_fn)
-		self.env_horizon = math.ceil((self.env_horizon - 1) / self.cfg.suite.action_repeat) + 1
+		self.env_horizon = math.ceil(self.env_horizon / self.cfg.suite.action_repeat)
 
 		# create replay buffer
 		data_specs = [
